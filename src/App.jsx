@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Link, useLocation, Navigate } f
 import { Target, Bell, Search, LogOut, ChevronDown } from 'lucide-react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { Login } from './pages/Login';
+import { OAuthCallback } from './pages/OAuthCallback';
 import { Dashboard } from './pages/Dashboard';
 import { ManagerView } from './pages/ManagerView';
 import { AdminView } from './pages/AdminView';
@@ -123,6 +124,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/oauth-callback" element={<OAuthCallback />} />
           <Route path="/*" element={
             <ProtectedRoute>
               <MainApp />

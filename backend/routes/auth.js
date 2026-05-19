@@ -2,7 +2,29 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const passport = require('passport');
 const User = require('../models/User');
+
+// Helper function to generate token and redirect
+const handleOAuthCallback = (req, res) => {
+  const token = jwt.sign(
+    { id: req.user._id, role: req.user.role, department: req.user.department },
+    process.env.JWT_SECRET,
+    { expiresIn: '24h' }
+  );
+  
+  const userData = encodeURIComponent(JSON.stringify({ 
+    id: req.user._id, 
+    name: req.user.name, 
+    role: req.user.role, 
+    email: req.user.email 
+  }));
+
+  const isProd = process.env.NODE_ENV === 'production';
+  const frontendUrl = isProd ? 'https://goal-setting-and-tracking-portal-rho.vercel.app' : 'http://localhost:5173';
+  
+  res.redirect(`${frontendUrl}/oauth-callback?token=${token}&user=${userData}`);
+};
 
 router.post('/register', async (req, res) => {
   try {
@@ -48,5 +70,23 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+// Google OAuth Routes
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'], session: false }));
+
+router.get(
+  '/google/callback',
+  passport.authenticate('google', { session: false, failureRedirect: '/login?error=true' }),
+  handleOAuthCallback
+);
+
+// GitHub OAuth Routes
+router.get('/github', passport.authenticate('github', { scope: ['user:email'], session: false }));
+
+router.get(
+  '/github/callback',
+  passport.authenticate('github', { session: false, failureRedirect: '/login?error=true' }),
+  handleOAuthCallback
+);
 
 module.exports = router;

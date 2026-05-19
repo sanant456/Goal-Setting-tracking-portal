@@ -47,7 +47,7 @@ export const Login = () => {
   };
 
   const handleOAuth = (provider) => {
-    alert(`Sign in with ${provider} will be available once OAuth applications are configured.`);
+    window.location.href = `/api/auth/${provider.toLowerCase()}`;
   };
 
   return (
