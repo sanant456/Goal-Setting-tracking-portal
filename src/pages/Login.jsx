@@ -13,41 +13,39 @@ export const Login = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   
-  const { login } = useAuth();
+  const { loginWithEmail, registerWithEmail, loginWithGoogle, loginWithGithub } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setSuccess('');
     try {
-      const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
-      const bodyData = isLogin 
-        ? { email, password }
-        : { name, email, password, role, department };
-
-      const res = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(bodyData)
-      });
-      const data = await res.json();
-      
-      if (!res.ok) throw new Error(data.error);
-      
       if (isLogin) {
-        login(data.token, data.user);
+        await loginWithEmail(email, password);
       } else {
-        setSuccess('Account created successfully! Please sign in.');
-        setIsLogin(true);
-        setPassword('');
+        await registerWithEmail(email, password, { name, role, department });
+        setSuccess('Account created successfully!');
+        // No need to manually login/switch, onAuthStateChanged in AuthContext will redirect via App.jsx ProtecedRoute automatically
       }
     } catch (err) {
-      setError(err.message);
+      console.error(err);
+      if (err.code === 'auth/email-already-in-use') {
+        setError('Email already exists. Please sign in.');
+      } else if (err.code === 'auth/invalid-credential') {
+        setError('Invalid email or password.');
+      } else {
+        setError(err.message);
+      }
     }
   };
 
-  const handleOAuth = (provider) => {
-    window.location.href = `/api/auth/${provider.toLowerCase()}`;
+  const handleOAuth = async (provider) => {
+    try {
+      if (provider === 'Google') await loginWithGoogle();
+      if (provider === 'GitHub') await loginWithGithub();
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   return (
