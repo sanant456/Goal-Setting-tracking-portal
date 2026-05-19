@@ -14,6 +14,10 @@
 
 <br />
 
+![GoalSync Dashboard Mockup](public/hero-mockup.png)
+
+<br />
+
 GoalSync is a modern, high-performance, and responsive full-stack platform designed for organizations to streamline employee goal management, team alignment, and performance tracking.
 
 With a beautiful interface powered by Tailwind CSS and Framer Motion, and secure, robust RESTful APIs backed by Node.js and MongoDB, GoalSync is built for scale and premium user experience.
