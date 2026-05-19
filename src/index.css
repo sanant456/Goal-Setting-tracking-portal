@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-blue: #3B82F6;
+  --color-brand-emerald: #10B981;
+  --color-brand-amber: #F59E0B;
+  --color-brand-red: #EF4444;
+
+  --color-space-950: #0B0F19; /* Main Background */
+  --color-space-900: #0F1322; /* Card / Surface */
+  --color-space-800: #1E293B; /* Border / Hover */
+  --color-space-700: #334155;
+  --color-space-400: #94A3B8; /* Muted Text */
+  --color-space-100: #F1F5F9; /* High contrast text */
+
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Outfit', system-ui, -apple-system, sans-serif;
+}
+
+@layer base {
+  :root {
+    /* Enforce Dark Mode Only Theme for PerformIQ */
+    --background: #0B0F19;
+    --foreground: #F1F5F9;
+    --card: #0F1322;
+    --card-foreground: #F1F5F9;
+    --popover: #0F1322;
+    --popover-foreground: #F1F5F9;
+    --primary: #3B82F6;
+    --primary-foreground: #ffffff;
+    --secondary: #1E293B;
+    --secondary-foreground: #F1F5F9;
+    --muted: #1E293B;
+    --muted-foreground: #94A3B8;
+    --accent: #1E293B;
+    --accent-foreground: #F1F5F9;
+    --destructive: #EF4444;
+    --destructive-foreground: #ffffff;
+    --border: #1E293B;
+    --input: #1E293B;
+    --ring: #3B82F6;
+    --radius: 0.75rem;
+  }
+
+  * {
+    border-color: var(--border);
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+.glass-panel {
+  background: rgba(15, 19, 34, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+}
+
+.status-pill {
+  @apply px-2.5 py-1 text-xs font-medium rounded-full;
+}
+.status-pill.on-track { @apply bg-brand-emerald/10 text-brand-emerald; }
+.status-pill.at-risk { @apply bg-brand-amber/10 text-brand-amber; }
+.status-pill.completed { @apply bg-brand-blue/10 text-brand-blue; }
